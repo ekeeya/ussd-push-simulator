@@ -8,7 +8,7 @@ import {
   Alert,
   StatusBar
 } from 'react-native';
-import { Container,Content, Left, Body,Right,  List, ListItem, Button, Icon, Title } from 'native-base';
+import { Container,Separator,Content} from 'native-base';
 import  DeviceInfo  from 'react-native-device-info';
 import RNExitApp from 'react-native-exit-app';
 
@@ -43,7 +43,6 @@ class HomeScreen extends Component {
     componentDidMount(){
         getMSISDN().then((tel)=>{
             if (tel){
-                console.log(tel)
                 this.setState({msisdn:tel})
                 this.props.fetchMsgs(tel)
                 this.props.getTesterData(tel)
@@ -126,6 +125,11 @@ class HomeScreen extends Component {
                 onOk={this.onDialogOK}
                 handleStateChange={this.handleStateChange}
                  />
+                 <View >
+                 <Separator style={{alignItems:'center'}} bordered>
+                    <Text>Messages</Text>
+                    </Separator>
+                 </View>
             
             <MessageList messages={this.state.messages}/>
             <RegisterModal
