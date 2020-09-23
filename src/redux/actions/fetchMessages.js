@@ -1,12 +1,21 @@
-export const fetchMessages = ()=>{
-    const response = {
-    messages :[
-        {id:1, type:'Incoming', message:'In this crazy world, we rich for the best we can',status:'Sent'},
-        {id:2, type:'Outgoing', message:'Walking through the dark night, calling out your name',status:'Received'},
-        {id:3, type:'Outgoing', message:"Wrote you a letter, didn't wanna see your face, was gonna hold onto my feelings nomatter  who is wrong or right",status:'Failed'}
-      ] }
+import axios from 'axios'
+import { ROOT_URL } from  '../../utils'
+
+const httpClient = axios.create();
+httpClient.defaults.timeout = 5000; 
+httpClient.defaults.baseURL = ROOT_URL
+
+
+export const fetchMessages = (msisdn)=>{
     return (dispatch) =>{
         dispatch({ type: 'FETCH_START'})
-        dispatch({ type: 'FETCH_SUCCESS',data:response})
+        httpClient.get(`${ROOT_URL}/demo/demo_msgs/${msisdn}`).
+        then(function(response){
+            dispatch({ type: 'FETCH_SUCCESS',data:response.data.data})
+        }).catch((error)=>{
+            console.log(error)
+            dispatch({ type: 'FETCH_ERROR',error:error})
+        })
+
     }
 }

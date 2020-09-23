@@ -1,6 +1,8 @@
 const initialState = {
     messages: [],
-    loading:false
+    fetching:false,
+    fetchError:null
+
 }
 
 export default function fetchMessages(state = initialState, action) {
@@ -13,9 +15,13 @@ export default function fetchMessages(state = initialState, action) {
 
         case 'FETCH_SUCCESS':
             return Object.assign({}, state, {
-                messages: action.data.messages,
+                messages: action.data,
                 loading: false,
             });
+            case 'FETCH_ERROR':
+                return Object.assign({}, state, {
+                    fetchError: action.error,
+                });
         default:
             return state
 

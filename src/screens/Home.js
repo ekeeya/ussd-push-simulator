@@ -6,55 +6,63 @@ import {
   View,
   Text,
   Alert,
-  StatusBar,
+  StatusBar
 } from 'react-native';
 import { Container,Content, Left, Body,Right,  List, ListItem, Button, Icon, Title } from 'native-base';
-import HeaderComponent  from '../components/Header'
-import MessageList from  '../components/MessageList'
 import  DeviceInfo  from 'react-native-device-info';
 import RNExitApp from 'react-native-exit-app';
 
+import HeaderComponent  from '../components/Header'
+import MessageList from  '../components/MessageList'
 import InteractionDialog from '../components/InteractionDialog';
+import RegisterModal from '../components/RegisterModal'
+import TitleComponent from '../components/TitleCard'
 
 import { connect } from 'react-redux'
 import { fetchMessages } from '../redux/actions/fetchMessages'
+import { registerTester, getMSISDN } from '../redux/actions/registerTester'
+import {getTester} from '../redux/actions/getTester'
 
-import {request, PERMISSIONS} from 'react-native-permissions';
+const text = "In this crazy life, we reach for the best we can but sometimes it slips away"
 
-const messages =[
-    {id:1, type:'Incoming', message:'In this crazy world, we rich for the best we can',status:'Sent'},
-    {id:2, type:'Outgoing', message:'Walking through the dark night, calling out your name',status:'Received'},
-    {id:3, type:'Outgoing', message:"Wrote you a letter, didn't wanna see your face, was gonna hold onto my feelings nomatter  who is wrong or right",status:'Failed'}
-  ] 
-const text = messages[2].message
+
 class HomeScreen extends Component {
     constructor(props){
         super(props)
         this.state = {
+            tester:null,
             isVisible:false,
             replyText:'',
-            messages:[]
+            deviceUniqueID:'',
+            msisdn:'',
+            messages:[],
+            isRegistered:false
         }
     }
 
     componentDidMount(){
-        this.props.fetchMsgs()
-        let deviceId = DeviceInfo.getDeviceId();
-        console.log(deviceId)
-        request(PERMISSIONS.ANDROID.READ_PHONE_STATE).then((result) => {
-            console.log(result)
-            
-          });
-
-        
-        
+        getMSISDN().then((tel)=>{
+            if (tel){
+                console.log(tel)
+                this.setState({msisdn:tel})
+                this.props.fetchMsgs(tel)
+                this.props.getTesterData(tel)
+            }
+        })
+        const uniqeID = DeviceInfo.getUniqueId();
+        this.setState({
+            deviceUniqueID:uniqeID,
+            isRegistered:this.props.isRegisted
+        })
     }
     static getDerivedStateFromProps(props, state){
-        if(props.messages !== state.messages){
+        
             return{
                 messages:[...props.messages],
+                tester:props.tester,
+                isRegistered:props.isRegisted
             }
-        }
+        
     }
     exitApp = ()=>{
         RNExitApp.exitApp();
@@ -84,12 +92,31 @@ class HomeScreen extends Component {
           this.setState({ [name]: text })
           }
       }
+    
+      testerRegistration = ()=>{
+          if(this.state.msisdn !== ''){
+              this.setState({
+                  isRegistered:true
+              })
+            this.props.register(this.state)
+            setTimeout(()=>{
+                this.props.fetchMsgs(this.state.msisdn)
+                this.props.getTesterData(this.state.msisdn)
+            },100)
+          }else{
+              alert("Phone number is required")
+          }
+      }
     render(){
         return (
             <>
             <StatusBar barStyle="dark-content" />
             <Container>
             <HeaderComponent exit={this.handleClick}/>
+            <TitleComponent 
+                deviceId={this.state.deviceUniqueID}
+                msisdn={this.props.tester ? this.props.tester.msisdn:''}/>
+            
             <InteractionDialog 
                 text={text} 
                 isVisible = {this.state.isVisible}
@@ -99,7 +126,13 @@ class HomeScreen extends Component {
                 onOk={this.onDialogOK}
                 handleStateChange={this.handleStateChange}
                  />
+            
             <MessageList messages={this.state.messages}/>
+            <RegisterModal
+                isVisible={!this.state.isRegistered}
+                onRegister={this.testerRegistration}
+                handleStateChange={this.handleStateChange}
+            />
             </Container>
         </>
         );
@@ -109,11 +142,19 @@ class HomeScreen extends Component {
 function mapStateToProps(state) {
     return {
         messages: state.fetchMessages.messages,
+        tester: state.registerTester.tester,
+        isRegisted:state.registerTester.isRegisted,
+        tester:state.getTester.tester,
+        isRegisted:state.getTester.isRegisted,
+        submitting:state.registerTester.submitting,
+        testerAddError:state.registerTester.testerAddError,
     }
 }
 function mapDispatchToProps(dispatch) {
     return {
-        fetchMsgs: () => { dispatch(fetchMessages()) },
+        fetchMsgs: (msisdn) => { dispatch(fetchMessages(msisdn)) },
+        register:(state)=>{dispatch(registerTester(state))},
+        getTesterData:(msisdn)=>{dispatch(getTester(msisdn))}
     }
 }
 
