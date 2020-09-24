@@ -4,14 +4,14 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Content, Left, Body, Right, List, ListItem, Button, Icon, Title } from 'native-base';
 
 
-const renderMsg = (msg) => {
+const renderMsg = (msg,idx) => {
     let color = 'blue'
-    const { msg_body, msg_type, status } = msg
+    const { text, msg_type, status } = msg
     color = status.toLocaleLowerCase() == 'received' ? '#304FFE' : status.toLocaleLowerCase() == 'failed' ? 'red' : '#008b00'
     let icon = status.toLocaleLowerCase() == 'failed' ? 'sms-failed' : 'sms'
 
     return (
-        <ListItem key={msg.id} thumbnail>
+        <ListItem key={idx} thumbnail>
             <Left>
                 <View style={{ width: 30 }}>
                     <Icon type="MaterialIcons" name={icon} style={{ color: color }} />
@@ -19,7 +19,7 @@ const renderMsg = (msg) => {
             </Left>
             <Body>
                 <Text style={{ color: '#424242', fontWeight: 'bold' }}>{msg_type}</Text>
-                <Text note numberOfLines={5}>{msg_body}</Text>
+                <Text note numberOfLines={5}>{text}</Text>
             </Body>
             <Right>
                 <Button transparent>
@@ -36,8 +36,8 @@ const MessageList = ({ messages }) => {
             <ScrollView>
                 <List>
                     {
-                        messages.map((msg) => {
-                            return renderMsg(msg)
+                        messages.map((msg,idx) => {
+                            return renderMsg(msg,idx)
                         })
                     }
                 </List>

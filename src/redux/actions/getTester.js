@@ -15,12 +15,12 @@ export const getTester = (msisdn)=>{
                 dispatch({ type: 'CHECK_SUCCESS',data:response.data.data,registered:true})
             }
             else{
-                dispatch({ type: 'CHECK_ERROR',error:response.data.message,registered:true})
+                dispatch({ type: 'CHECK_ERROR',error:response.data.message,registered:false})
                 alert(response.data.message)
             }
         }).catch((error)=>{
             console.log(error)
-            dispatch({ type: 'CHECK_ERROR',error:error,registered:true})
+            dispatch({ type: 'CHECK_ERROR',error:error,registered:false})
             alert(error)
         })
 
