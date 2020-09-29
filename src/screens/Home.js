@@ -22,6 +22,7 @@ import { connect } from 'react-redux'
 import { fetchMessages } from '../redux/actions/fetchMessages'
 import { registerTester, getMSISDN } from '../redux/actions/registerTester'
 import { getTester } from '../redux/actions/getTester'
+import {sendMessage} from '../redux/actions/sendMsg'
 
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 
@@ -41,7 +42,7 @@ class HomeScreen extends Component {
             isRegistered: false
         }
         //this.socket = SocketIOClient("ws://192.168.1.104:8000/ws/demo");
-        this.client = new W3CWebSocket(`ws://192.168.1.104:8000/ws/demo`)
+        this.client = new W3CWebSocket(`ws://129.205.2.58:5000/ws/demo`)
     }
 
    
@@ -116,6 +117,11 @@ class HomeScreen extends Component {
     }
     onDialogSend = () => {
         console.log("sending")
+        this.props.sendMsg(this.state);
+        this.setState({
+            replyText:'',
+            isVisible:false
+        })
     }
     onDialogCancel = () => {
         this.setState({ isVisible: false })
@@ -195,7 +201,8 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchMsgs: (msisdn) => { dispatch(fetchMessages(msisdn)) },
         register: (state) => { dispatch(registerTester(state)) },
-        getTesterData: (msisdn) => { dispatch(getTester(msisdn)) }
+        getTesterData: (msisdn) => { dispatch(getTester(msisdn)) },
+        sendMsg:(state) =>{dispatch(sendMessage(state))}
     }
 }
 
