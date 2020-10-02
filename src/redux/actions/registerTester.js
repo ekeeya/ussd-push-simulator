@@ -6,9 +6,21 @@ const httpClient = axios.create();
 httpClient.defaults.timeout = 5000; 
 httpClient.defaults.baseURL = ROOT_URL
 
+export const  standardURN =(urn)=>{
+  if(urn[0] === "0"){
+    return urn.replace("0","256")
+  }
+  else if(urn[0] == "+"){
+    return urn.substring(1)
+  }
+  else{
+    return urn
+  }
+}
+
 const persistMsisdn = async (msisdn) => {
     try {
-      await AsyncStorage.setItem('msisdn',msisdn )
+      await AsyncStorage.setItem('msisdn',standardURN(msisdn) )
       console.log("I have stored the value")
     } catch (e) {
       console.log(e)
@@ -39,7 +51,7 @@ export const registerTester =  (state)=>{
         dispatch({ type: 'REG_START'})
         httpClient.post(`${ROOT_URL}/demo/demo_register/`,
         {
-          msisdn: msisdn,
+          msisdn: standardURN(msisdn),
           deviceUniqueID: deviceUniqueID
         }).
         then(function(response){

@@ -14,7 +14,7 @@ export const sendMessage =  (state)=>{
 
     return (dispatch) =>{
         //dispatch({ type: 'REG_START'})
-        httpClient.post(`http://129.205.2.58/c/ex/98377d36-aea7-482a-8ecb-72575bf8bee2/receive`,params).
+        httpClient.post(`http://129.205.2.58/c/ex/b5c95ea8-0b98-4bb5-bba8-f11f9abf8f73/receive`,params).
         then(function(response){
             console.log(response)
         }).catch((error)=>{

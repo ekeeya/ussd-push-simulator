@@ -20,7 +20,7 @@ import TitleComponent from '../components/TitleCard'
 
 import { connect } from 'react-redux'
 import { fetchMessages } from '../redux/actions/fetchMessages'
-import { registerTester, getMSISDN } from '../redux/actions/registerTester'
+import { registerTester, getMSISDN, standardURN } from '../redux/actions/registerTester'
 import { getTester } from '../redux/actions/getTester'
 import {sendMessage} from '../redux/actions/sendMsg'
 
@@ -37,7 +37,6 @@ class HomeScreen extends Component {
             incomingText:'',
             isReplyPush:false,
             deviceUniqueID: '',
-            msisdn: '',
             messages: [],
             isRegistered: false
         }
@@ -62,12 +61,13 @@ class HomeScreen extends Component {
         })
 
           this.client.onmessage = (message)=>{
+            console.log("We have a message")
             const dataFromServer = JSON.parse(message.data);
             if(dataFromServer){
-                const { to,action,text } = dataFromServer.command
+                const { to_no_plus,action,text } = dataFromServer.command
                 console.log([dataFromServer.command])
                 const isTrue = (action.toLowerCase()) ==='request' ? true : false;
-                if (to === this.state.msisdn){
+                if (to_no_plus === standardURN(this.state.msisdn)){
                     this.setState({
                         isVisible:true,
                         incomingText:text,
@@ -157,7 +157,7 @@ class HomeScreen extends Component {
                     <HeaderComponent exit={this.handleClick} />
                     <TitleComponent
                         deviceId={this.state.deviceUniqueID}
-                        msisdn={this.props.tester ? this.props.tester.msisdn : ''} />
+                        msisdn={this.props.tester ? standardURN(this.props.tester.msisdn): ''} />
 
                     <InteractionDialog
                         text={this.state.incomingText}
@@ -170,7 +170,7 @@ class HomeScreen extends Component {
                     />
                     <View >
                         <Separator style={{ alignItems: 'center' }} bordered>
-                            <Text>Messages</Text>
+                            <Text></Text>
                         </Separator>
                     </View>
                     {console.log(this.state.messages)}
