@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ROOT_URL } from  '../../utils'
 
 const httpClient = axios.create();
-httpClient.defaults.timeout = 5000; 
+httpClient.defaults.timeout = 15000; 
 httpClient.defaults.baseURL = ROOT_URL
 
 const params = new URLSearchParams();
@@ -14,7 +14,7 @@ export const sendMessage =  (state)=>{
 
     return (dispatch) =>{
         //dispatch({ type: 'REG_START'})
-        httpClient.post(`http://129.205.2.58/c/ex/b5c95ea8-0b98-4bb5-bba8-f11f9abf8f73/receive`,params).
+        httpClient.post(`http://129.205.2.58/c/ex/d96cc930-5519-4798-b9da-c1f83e05a388/receive`,params).
         then(function(response){
             console.log(response)
         }).catch((error)=>{
@@ -24,3 +24,4 @@ export const sendMessage =  (state)=>{
     }
     
 }
+

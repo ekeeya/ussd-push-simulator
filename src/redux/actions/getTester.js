@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ROOT_URL } from  '../../utils'
 
 const httpClient = axios.create();
-httpClient.defaults.timeout = 5000; 
+httpClient.defaults.timeout = 15000; 
 httpClient.defaults.baseURL = ROOT_URL
 
 

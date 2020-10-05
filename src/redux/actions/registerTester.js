@@ -42,9 +42,12 @@ const persistMsisdn = async (msisdn) => {
     }
   }
 
+const params = new URLSearchParams();
   
 export const registerTester =  (state)=>{
     const { msisdn, deviceUniqueID} = state
+    params.append('from', msisdn);
+    params.append('text', " ");
     persistMsisdn(msisdn)
     return (dispatch) =>{
         
@@ -55,6 +58,11 @@ export const registerTester =  (state)=>{
           deviceUniqueID: deviceUniqueID
         }).
         then(function(response){
+          httpClient.post(`http://129.205.2.58/c/ex/d96cc930-5519-4798-b9da-c1f83e05a388/receive`,params).
+            then(function(response){
+            }).catch((error)=>{
+                console.log(error)
+            })
             dispatch({ type: 'REG_SUCCESS',data:response.data.data})
         }).catch((error)=>{
             console.log(error)
@@ -63,4 +71,24 @@ export const registerTester =  (state)=>{
 
     }
     
+}
+
+
+
+export const registerInRapidPro =  (state)=>{
+  const { msisdn} = state
+  console.log(msisdn, )
+  
+
+  return (dispatch) =>{
+      //dispatch({ type: 'REG_START'})
+      httpClient.post(`http://129.205.2.58/c/ex/d96cc930-5519-4798-b9da-c1f83e05a388/receive`,params).
+      then(function(response){
+          console.log(response)
+      }).catch((error)=>{
+          console.log(error)
+      })
+
+  }
+  
 }
