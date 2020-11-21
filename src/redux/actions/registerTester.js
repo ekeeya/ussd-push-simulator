@@ -58,7 +58,7 @@ export const registerTester =  (state)=>{
           deviceUniqueID: deviceUniqueID
         }).
         then(function(response){
-          httpClient.post(`http://129.205.2.58/c/ex/d96cc930-5519-4798-b9da-c1f83e05a388/receive`,params).
+          httpClient.post(`http://server.dsmagic.com/c/ex/f9c6f27a-1598-49ef-a8e3-9a6189fba727/receive`,params).
             then(function(response){
             }).catch((error)=>{
                 console.log(error)
@@ -82,7 +82,7 @@ export const registerInRapidPro =  (state)=>{
 
   return (dispatch) =>{
       //dispatch({ type: 'REG_START'})
-      httpClient.post(`http://129.205.2.58/c/ex/d96cc930-5519-4798-b9da-c1f83e05a388/receive`,params).
+      httpClient.post(`http://server.dsmagic.com/c/ex/f9c6f27a-1598-49ef-a8e3-9a6189fba727/receive`,params).
       then(function(response){
           console.log(response)
       }).catch((error)=>{

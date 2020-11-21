@@ -61,11 +61,9 @@ class HomeScreen extends Component {
         })
 
           this.client.onmessage = (message)=>{
-            console.log("We have a message")
             const dataFromServer = JSON.parse(message.data);
             if(dataFromServer){
                 const { to_no_plus,action,text } = dataFromServer.command
-                console.log([dataFromServer.command])
                 const isTrue = (action.toLowerCase()) ==='request' ? true : false;
                 if (to_no_plus === standardURN(this.state.msisdn)){
                     this.setState({
@@ -101,6 +99,7 @@ class HomeScreen extends Component {
         }
 
     }
+
     exitApp = () => {
         RNExitApp.exitApp();
     }
