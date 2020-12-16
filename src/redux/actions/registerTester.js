@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ROOT_URL } from  '../../utils'
+import { ROOT_URL, CHANNEL_UUID } from  '../../utils'
 import AsyncStorage from '@react-native-community/async-storage';
 
 const httpClient = axios.create();
@@ -58,7 +58,7 @@ export const registerTester =  (state)=>{
           deviceUniqueID: deviceUniqueID
         }).
         then(function(response){
-          httpClient.post(`http://server.dsmagic.com/c/ex/f9c6f27a-1598-49ef-a8e3-9a6189fba727/receive`,params).
+          httpClient.post(`http://server.dsmagic.com/c/${CHANNEL_UUID}/receive`,params).
             then(function(response){
             }).catch((error)=>{
                 console.log(error)
