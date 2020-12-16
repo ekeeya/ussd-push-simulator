@@ -82,7 +82,7 @@ export const registerInRapidPro =  (state)=>{
 
   return (dispatch) =>{
       //dispatch({ type: 'REG_START'})
-      httpClient.post(`http://server.dsmagic.com/c/ex/f9c6f27a-1598-49ef-a8e3-9a6189fba727/receive`,params).
+      httpClient.post(`http://server.dsmagic.com/c/ex/${CHANNEL_UUID}/receive`,params).
       then(function(response){
           console.log(response)
       }).catch((error)=>{
