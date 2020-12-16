@@ -23,6 +23,7 @@ import { fetchMessages } from '../redux/actions/fetchMessages'
 import { registerTester, getMSISDN, standardURN } from '../redux/actions/registerTester'
 import { getTester } from '../redux/actions/getTester'
 import {sendMessage} from '../redux/actions/sendMsg'
+import { CHANNEL_UUID, WEBSOCKET_URL } from  '../utils'
 
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 
@@ -40,8 +41,7 @@ class HomeScreen extends Component {
             messages: [],
             isRegistered: false
         }
-        //this.socket = SocketIOClient("ws://192.168.1.104:8000/ws/demo");
-        this.client = new W3CWebSocket(`ws://129.205.2.58:5000/ws/demo`)
+        this.client = new W3CWebSocket(`ws://${WEBSOCKET_URL}/ws/demo`)
     }
 
    
